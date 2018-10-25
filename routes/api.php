@@ -28,6 +28,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::get('/doors', function (Request $request) {
     $result = Device::all();
+
     return \App\Http\Resources\Device::collection($result);
 });
 
