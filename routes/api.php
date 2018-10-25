@@ -4,6 +4,8 @@ use Illuminate\Http\Request;
 use  \App\Person;
 use \App\Device;
 use \App\Http\Resources\Person as PersonResource;
+use \App\Http\Resources\VwPerson as VwPersonResource;
+use \App\Http\Resources\Device as devices;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -16,11 +18,39 @@ use \App\Http\Resources\Person as PersonResource;
 */
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
+   /* $user = $request->get('IdMD5',$request);
+
+    $user = \App\User::where('IdMD5',''.$user.'')
+        ->first();
+*/
     return $request->user();
 });
 
-Route::get('my_first_api','PostsController@my_first_api');
+Route::get('/doors', function (Request $request) {
+    $result = Device::all();
+    return \App\Http\Resources\Device::collection($result);
+});
 
+
+Route::middleware('auth:api')->post('/login',function (Request $request){
+
+    try {
+        $result=\App\VwPerson::where('IdMD5',$request->input('IdMD5'))->get(['Id']);
+        if(count($result) == 0)
+        {
+            return ['success' => false, 'message' => 'No variable'];
+
+        }else
+        {
+            return ['success' => true, 'message' => 'Welcome to Panterhill Apartments'];
+
+        }
+    } catch(\Illuminate\Database\QueryException $ex){
+        return ['false' => true, 'message' => $ex->getMessage()];
+    }
+
+
+});
 
 //List Persons
 Route::get('persons','PersonController@index');
@@ -42,19 +72,24 @@ Route::delete('persons/{id}','PersonController@destroy');
 
 Route::get('/json',function ()
 {
-$result = Person::find(1);
+$result = \App\VwPerson::find(1);
 
-
-    return PersonResource::collection($result);
+    return VwPersonResource::collection($result);
 
 });
+Route::get('/person',function ()
+{
+    $result = \App\VwPerson::all();
 
-Route::get('/doors',function ()
+    return VwPersonResource::collection($result);
+
+});
+/*Route::get('/doors',function ()
 {
     $result = Device::all();
     return \App\Http\Resources\Device::collection($result);
 
-});
+});*/
 
 
 Route::get('/search_plate/{plate}',function ($plate)
@@ -69,6 +104,15 @@ Route::get('/search_plate/{plate}',function ($plate)
 
 
 });
+
+
+
+
+
+
+/*Route::middleware('auth:api')->get('/doors', function (Request $request) {
+    return $request->devices();
+});*/
 
 
 

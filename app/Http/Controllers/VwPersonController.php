@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\VwPerson;
 use Illuminate\Http\Request;
-use App\Http\Resources\Person;
 
-class PostsController extends Controller
+class VwPersonController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +14,7 @@ class PostsController extends Controller
      */
     public function index()
     {
-        return "Hello";
+        //
     }
 
     /**
@@ -41,21 +41,21 @@ class PostsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\VwPerson  $vwPerson
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(VwPerson $vwPerson)
     {
-        return "I am showing ".$id;
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\VwPerson  $vwPerson
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(VwPerson $vwPerson)
     {
         //
     }
@@ -64,10 +64,10 @@ class PostsController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\VwPerson  $vwPerson
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, VwPerson $vwPerson)
     {
         //
     }
@@ -75,43 +75,11 @@ class PostsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\VwPerson  $vwPerson
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(VwPerson $vwPerson)
     {
         //
-
     }
-
-
-
-    public function  contact()
-    {
-        return view('contact');
-    }
-
-
-    public  function show_my_posts($id,$name,$password)
-    {
-        return view('posts',compact('id','name','password'));
-    }
-
-
-    public  function my_first_api()
-    {
-        $data = [
-            'name'=>'ezgi',
-            'mobile'=>'68712638768',
-            'email'=>'ezgi@gmail.com',
-            'status'=>0
-        ];
-        return response()->json($data);
-
-
-    }
-
-
-
-
 }
