@@ -36,13 +36,19 @@ Route::get('/doors', function (Request $request) {
 Route::middleware('auth:api')->post('/login',function (Request $request){
 
     try {
-        $result=\App\VwPerson::where('IdMD5',$request->input('IdMD5'))->get(['Id']);
-        if(count($result) == 0)
+        $result=\App\VwPerson::where('IdMD5',$request->input('IdMD5'))->value('Id');
+        if($result == null)
         {
+
+
+
             return ['success' => false, 'message' => 'No variable'];
+
 
         }else
         {
+
+            Person::where('Id', $result)->update(array('created_at' => now()));
             return ['success' => true, 'message' => 'Welcome to Panterhill Apartments'];
 
         }
@@ -53,47 +59,11 @@ Route::middleware('auth:api')->post('/login',function (Request $request){
 
 });
 
-//List Persons
-Route::get('persons','PersonController@index');
 
 
-//List Single Person
-Route::get('persons/{id}','PersonController@show');
 
 
-//Create new person
-Route::post('persons','PersonController@store');
-
-//Update a person
-Route::put('persons/{id}','PersonController@store');
-
-
-//Delete a person
-Route::delete('persons/{id}','PersonController@destroy');
-
-Route::get('/json',function ()
-{
-$result = \App\VwPerson::find(1);
-
-    return VwPersonResource::collection($result);
-
-});
-Route::get('/person',function ()
-{
-    $result = \App\VwPerson::all();
-
-    return VwPersonResource::collection($result);
-
-});
-/*Route::get('/doors',function ()
-{
-    $result = Device::all();
-    return \App\Http\Resources\Device::collection($result);
-
-});*/
-
-
-Route::get('/search_plate/{plate}',function ($plate)
+Route::middleware('auth:api')->get('/search_plate/{plate}',function ($plate)
 {
 
     $result = App\Person::where('plate', $plate)
